@@ -1,0 +1,68 @@
+heat_template_version: 2013-05-23
+
+description: Simple template to deploy a single compute instance
+
+parameters:
+  ImageID:
+    type: string
+    description: Image ID
+  NetID:
+    type: string
+    description: External Network ID
+  password:
+    type: string
+resources:
+  Server1:
+    type: OS::Nova::Server
+    properties:
+      config_drive: true
+      image: { get_param: ImageID }
+      flavor: m1.small
+      networks:
+        - network: { get_param: NetID }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash -v
+            /usr/bin/yum -y install epel-release -y
+            /usr/bin/yum -y install httpd -y
+            /bin/echo "Got Request on Server1" > /var/www/html/index.html
+            /usr/bin/systemctl restart httpd.service
+          params:
+            password: { get_param: password }
+  Server2:
+    type: OS::Nova::Server
+    properties:
+      config_drive: true
+      image: { get_param: ImageID }
+      flavor: m1.small
+      networks:
+        - network: { get_param: NetID }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash -v
+            /usr/bin/yum -y install epel-release -y
+            /usr/bin/yum -y install httpd -y
+            /bin/echo "Got Request on Server2" > /var/www/html/index.html
+            /usr/bin/systemctl restart httpd.service
+          params:
+            password: { get_param: password }
+  Server3:
+    type: OS::Nova::Server
+    properties:
+      config_drive: true
+      image: { get_param: ImageID }
+      flavor: m1.small
+      networks:
+        - network: { get_param: NetID }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash -v
+            /usr/bin/yum -y install epel-release -y
+            /usr/bin/yum -y install httpd -y
+            /bin/echo "Got Request on Server3" > /var/www/html/index.html
+            /usr/bin/systemctl restart httpd.service
+          params:
+            password: { get_param: password }
